@@ -2,7 +2,8 @@ name: Medicine Sync Cron
 
 on:
   schedule:
-    - cron: '*/10 1-4 * * *' # every 10 min between 1AM-4AM
+    # سيشتغل كل 10 دقائق لضمان إنهاء الـ 152 صنفاً في ليلة واحدة
+    - cron: '*/10 1-4 * * *'
   workflow_dispatch:
 
 jobs:
@@ -11,10 +12,11 @@ jobs:
     steps:
       - name: Call Supabase Edge Function
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          URL: ${{ secrets.SUPABASE_URL }}
+          KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
-          curl -i -X POST "${SUPABASE_URL}" \
-          -H "apikey: ${SUPABASE_KEY}" \
+          # تأكد من استخدام المتغيرات بدون مسافات زائدة
+          curl -i -X POST "$URL" \
+          -H "Authorization: Bearer $KEY" \
           -H "Content-Type: application/json" \
           -d '{"batchIndex": 0}'

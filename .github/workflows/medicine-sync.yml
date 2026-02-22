@@ -13,7 +13,7 @@ jobs:
       - name: Call Supabase Edge Function
         id: call_edge
         env:
-          EDGE_FUNCTION_URL: ${{ secrets.EDGE_FUNCTION_URL }}
+          EDGE_FUNCTION_URL: ${{ secrets.SUPABASE_URL }}
           SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           echo "Calling Edge Function..."

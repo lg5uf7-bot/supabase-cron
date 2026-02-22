@@ -1,23 +1,20 @@
 name: Medicine Sync Cron
 
-# جدولة التشغيل: كل 10 دقائق من الساعة 1 إلى 4 صباحاً
 on:
   schedule:
-    - cron: '*/10 1-4 * * *'
-  workflow_dispatch: # للتشغيل اليدوي عند الحاجة
+    - cron: '0 2 * * *'   # مرة يومياً الساعة 2 صباحاً UTC
+  workflow_dispatch:
 
 jobs:
   update-medicines:
     runs-on: ubuntu-latest
     steps:
-      - name: Send POST request to Supabase Edge Function
+      - name: Call Edge Function
         env:
-          # تأكد أن هذه الأسماء مطابقة تماماً لما في GitHub Secrets
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          EDGE_FUNCTION_URL: ${{ secrets.EDGE_FUNCTION_URL }}
+          SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
-          echo "Calling Supabase Edge Function..."
-          curl -i -X POST "${SUPABASE_URL}" \
-            -H "Authorization: Bearer ${SUPABASE_KEY}" \
+          curl -X POST "$EDGE_FUNCTION_URL" \
+            -H "Authorization: Bearer $SERVICE_ROLE" \
             -H "Content-Type: application/json" \
             -d '{}'

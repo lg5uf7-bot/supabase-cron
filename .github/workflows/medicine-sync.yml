@@ -2,7 +2,7 @@ name: Medicine Daily Sync
 
 on:
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '0 2 * * *'  # Runs every day at 2:00 AM UTC
   workflow_dispatch:
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
       - name: Call Supabase Edge Function
         id: call_edge
         env:
-          EDGE_FUNCTION_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           echo "Calling Edge Function..."
@@ -27,6 +27,7 @@ jobs:
           echo "HTTP Status: $response"
           cat response.json
 
+          # Output status for conditional steps
           echo "status=$response" >> $GITHUB_OUTPUT
 
       - name: Send Telegram Success

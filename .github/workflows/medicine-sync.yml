@@ -19,7 +19,7 @@ jobs:
           echo "Calling Edge Function..."
           
           response=$(curl -s -o response.json -w "%{http_code}" \
-            -X POST "$EDGE_FUNCTION_URL" \
+            -X POST "$SUPABASE_URL " \
             -H "Authorization: Bearer $SERVICE_ROLE_KEY" \
             -H "Content-Type: application/json" \
             -d '{}')
